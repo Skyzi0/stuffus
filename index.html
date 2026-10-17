@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stuffs par classe</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <h1>Stuffus</h1>
+      <button id="folder-btn" class="folder-btn" type="button" title="Changer de dossier"></button>
+    </div>
+    <nav class="tabs" aria-label="Vues">
+      <a class="tab" data-view="stuffs" href="#">Stuffs</a>
+      <a class="tab" data-view="bank" href="#banque">Banque d'objets</a>
+      <a class="tab" data-view="craft" href="#fabrication">Fabrication</a>
+      <a class="tab" data-view="tags" href="#tags">Tags</a>
+      <a class="tab" data-view="history" href="#historique">Historique</a>
+    </nav>
+    <div class="tools">
+      <span id="save-status" class="save-status" role="status"></span>
+      <input id="search" type="search" placeholder="Rechercher…" title="Rechercher un objet, un tag, un personnage…" autocomplete="off">
+      <button id="edit-toggle" class="edit-toggle" type="button" aria-pressed="false">Modifier</button>
+    </div>
+  </header>
+
+  <nav id="classes" class="classes" aria-label="Classes"></nav>
+
+  <main id="content"></main>
+
+  <dialog id="picker" class="picker" aria-labelledby="picker-title">
+    <div class="picker-head">
+      <h2 id="picker-title"></h2>
+      <button id="picker-close" class="picker-close" type="button" aria-label="Fermer">×</button>
+    </div>
+    <input id="picker-search" type="search" placeholder="Filtrer les objets…" autocomplete="off">
+    <ul id="picker-list" class="picker-list" role="listbox"></ul>
+  </dialog>
+
+  <dialog id="stuff-dialog" class="picker stuff-dialog" aria-labelledby="stuff-dialog-title">
+    <form id="stuff-form" method="dialog">
+      <div class="picker-head">
+        <h2 id="stuff-dialog-title"></h2>
+        <button class="picker-close" type="button" value="cancel" aria-label="Fermer" data-close>×</button>
+      </div>
+      <div class="form-fields">
+        <label>Nom du stuff
+          <input name="name" required maxlength="80" autocomplete="off" placeholder="ex. Terre Eau Air Initiative">
+        </label>
+        <label><span>Niveau <span class="optional">(facultatif)</span></span>
+          <input name="level" type="number" min="1" max="200" step="1" inputmode="numeric" placeholder="ex. 200">
+        </label>
+        <label><span>Initiative <span class="optional">(facultatif)</span></span>
+          <input name="initiative" type="number" min="0" step="1" inputmode="numeric" placeholder="ex. 3200">
+        </label>
+        <label><span>Lien DofusBook <span class="optional">(facultatif)</span></span>
+          <input name="link" type="url" autocomplete="off" placeholder="https://d-bk.net/fr/d/…">
+        </label>
+        <p id="stuff-form-error" class="form-error" role="alert"></p>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn" data-close>Annuler</button>
+        <button type="submit" class="btn btn-primary" id="stuff-form-submit"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="tag-dialog" class="picker stuff-dialog" aria-labelledby="tag-dialog-title">
+    <form id="tag-form" method="dialog">
+      <div class="picker-head">
+        <h2 id="tag-dialog-title"></h2>
+        <button class="picker-close" type="button" aria-label="Fermer" data-close>×</button>
+      </div>
+      <div class="form-fields">
+        <label id="tag-pick-field">Tag
+          <select name="pick"></select>
+        </label>
+        <div id="tag-new-fields" class="form-fields-group">
+        <label>Type
+          <select name="kind">
+            <option value="trans">Trans (transcendance)</option>
+            <option value="over">Over (overmage)</option>
+            <option value="exo">Exo</option>
+            <option value="removed">Statistique à retirer (−)</option>
+          </select>
+        </label>
+        <label><span>Texte <span class="optional" id="tag-text-hint"></span></span>
+          <input name="text" maxlength="60" autocomplete="off">
+        </label>
+        </div>
+        <p class="form-error" role="alert"></p>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn" data-close>Annuler</button>
+        <button type="submit" class="btn btn-primary" id="tag-form-submit"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="folders-dialog" class="picker stuff-dialog" aria-labelledby="folders-dialog-title">
+    <div class="picker-head">
+      <h2 id="folders-dialog-title">Dossiers</h2>
+      <button class="picker-close" type="button" aria-label="Fermer" data-close>×</button>
+    </div>
+    <ul id="folders-list" class="folders-list"></ul>
+    <div class="form-actions" id="folders-actions"></div>
+  </dialog>
+
+  <dialog id="folder-dialog" class="picker stuff-dialog" aria-labelledby="folder-dialog-title">
+    <form id="folder-form" method="dialog">
+      <div class="picker-head">
+        <h2 id="folder-dialog-title"></h2>
+        <button class="picker-close" type="button" aria-label="Fermer" data-close>×</button>
+      </div>
+      <div class="form-fields">
+        <label>Nom du dossier
+          <input name="name" required maxlength="40" autocomplete="off" placeholder="ex. Tylezia">
+        </label>
+        <label><span>Serveur <span class="optional">(facultatif)</span></span>
+          <input name="server" maxlength="40" autocomplete="off" placeholder="ex. Dakal">
+        </label>
+        <p class="form-error" role="alert"></p>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn" data-close>Annuler</button>
+        <button type="submit" class="btn btn-primary" id="folder-form-submit"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="character-dialog" class="picker stuff-dialog" aria-labelledby="character-dialog-title">
+    <form id="character-form" method="dialog">
+      <div class="picker-head">
+        <h2 id="character-dialog-title"></h2>
+        <button class="picker-close" type="button" aria-label="Fermer" data-close>×</button>
+      </div>
+      <div class="form-fields">
+        <label>Classe
+          <span class="class-pick">
+            <img id="character-icon" alt="">
+            <select name="class"></select>
+          </span>
+        </label>
+        <label><span>Nom affiché <span class="optional">(nom du personnage en jeu)</span></span>
+          <input name="name" maxlength="40" autocomplete="off">
+        </label>
+        <p class="form-error" role="alert"></p>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn" data-close>Annuler</button>
+        <button type="submit" class="btn btn-primary" id="character-form-submit"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="stock-dialog" class="picker stuff-dialog" aria-labelledby="stock-dialog-title">
+    <form id="stock-form" method="dialog">
+      <div class="picker-head">
+        <h2 id="stock-dialog-title"></h2>
+        <button class="picker-close" type="button" aria-label="Fermer" data-close>×</button>
+      </div>
+      <div class="form-fields">
+        <label>Catégorie
+          <select name="category"></select>
+        </label>
+        <label id="stock-owner-field">Réservé à
+          <select name="owner"></select>
+        </label>
+        <fieldset id="stock-targets-field" class="field targets">
+          <legend class="field-label">Ajouter au stock de</legend>
+          <div id="stock-targets" class="target-list"></div>
+        </fieldset>
+        <div class="field">
+          <span class="field-label">Objet</span>
+          <button type="button" id="stock-item" class="stock-item"></button>
+        </div>
+        <div class="field">
+          <span class="field-label">Tags <span class="optional">(forgemagie)</span></span>
+          <div id="stock-tags" class="bonuses"></div>
+        </div>
+        <div class="form-row">
+          <label>Quantité
+            <input name="quantity" type="number" min="1" step="1" inputmode="numeric" required>
+          </label>
+          <label>État
+            <select name="status">
+              <option value="missing">À obtenir</option>
+              <option value="crafted">Fabriqué (pas encore modifié)</option>
+              <option value="owned">Possédé</option>
+            </select>
+          </label>
+        </div>
+        <p class="form-error" role="alert"></p>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn" data-close>Annuler</button>
+        <button type="submit" class="btn btn-primary" id="stock-form-submit"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="craft-dialog" class="picker stuff-dialog" aria-labelledby="craft-dialog-title">
+    <form id="craft-form" method="dialog">
+      <div class="picker-head">
+        <h2 id="craft-dialog-title">Ajouter à la fabrication</h2>
+        <button class="picker-close" type="button" aria-label="Fermer" data-close>×</button>
+      </div>
+      <div class="form-fields">
+        <label>Catégorie
+          <select name="category"></select>
+        </label>
+        <div class="field">
+          <span class="field-label">Objet</span>
+          <button type="button" id="craft-item" class="stock-item"></button>
+        </div>
+        <div class="form-row">
+          <label>Quantité
+            <input name="quantity" type="number" min="1" step="1" inputmode="numeric" required>
+          </label>
+          <label>Réservé à
+            <select name="owner"></select>
+          </label>
+        </div>
+        <p class="form-error" role="alert"></p>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn" data-close>Annuler</button>
+        <button type="submit" class="btn btn-primary">Ajouter à la liste</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="craft-qty-dialog" class="picker stuff-dialog" aria-labelledby="craft-qty-title">
+    <form id="craft-qty-form" method="dialog">
+      <div class="picker-head">
+        <h2 id="craft-qty-title"></h2>
+        <button class="picker-close" type="button" aria-label="Fermer" data-close>×</button>
+      </div>
+      <div class="form-fields">
+        <p id="craft-qty-text" class="tag-summary"></p>
+        <div class="field">
+          <span class="field-label">Quantité</span>
+          <div class="qty-field">
+            <input name="quantity" type="number" min="1" step="1" inputmode="numeric" required>
+            <span id="craft-qty-total"></span>
+            <button type="button" class="btn btn-small" id="craft-qty-max">Max</button>
+          </div>
+        </div>
+        <fieldset id="craft-qty-copies-field" class="field targets">
+          <legend class="field-label">Exemplaires concernés</legend>
+          <div id="craft-qty-copies" class="target-list"></div>
+        </fieldset>
+        <p class="form-error" role="alert"></p>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn" data-close>Annuler</button>
+        <button type="submit" class="btn btn-primary" id="craft-qty-submit"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="choice-dialog" class="picker stuff-dialog" aria-labelledby="choice-title">
+    <div class="picker-head">
+      <h2 id="choice-title"></h2>
+      <button class="picker-close" type="button" aria-label="Fermer" data-close>×</button>
+    </div>
+    <div class="form-fields">
+      <p id="choice-text"></p>
+      <div id="choice-options" class="choice-options"></div>
+    </div>
+    <div class="form-actions">
+      <button type="button" class="btn" data-close>Annuler</button>
+    </div>
+  </dialog>
+
+  <!-- Commun à tous les dossiers -->
+  <script src="js/slots.js"></script>
+  <script src="data/item-icons.js"></script>
+  <script src="data/dofus/items.js"></script>
+  <script src="data/dofus/scrolls.js"></script>
+  <script src="data/dofus/common-spells.js"></script>
+  <script src="data/dofus/recipes.js"></script>
+  <script src="js/bank-build.js"></script>
+  <script src="data/tags.js"></script>
+  <script src="data/spell-notes.js"></script>
+  <script src="data/scroll-notes.js"></script>
+  <script src="data/folders.js"></script>
+  <!-- Données du dossier choisi, puis js/app.js -->
+  <script src="js/boot.js"></script>
+</body>
+</html>

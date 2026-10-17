@@ -1,0 +1,22 @@
+{
+  "name": "tracking-stuff",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Stuffus : suivi des stuffs, du stock, du parchottage, des sorts communs et de la fabrication des personnages Dofus (site local).",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "setup": "node scripts/setup.js",
+    "update-data": "node scripts/setup.js --force",
+    "extract:stuffs": "python scripts/extract_stuffs.py",
+    "fetch:items": "node scripts/fetchItems.js",
+    "fetch:item-sets": "node scripts/fetchItemSets.js",
+    "fetch:item-icons": "node scripts/fetchItemIcons.js",
+    "fetch:scrolls": "node scripts/fetchScrolls.js",
+    "fetch:common-spells": "node scripts/fetchCommonSpells.js",
+    "fetch:recipes": "node scripts/fetchRecipes.js",
+    "build:bank": "node scripts/buildBank.js"
+  }
+}

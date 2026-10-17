@@ -1,0 +1,36 @@
+# --- Configuration locale (port, dossier de données) : propre à chaque PC ---
+config.json
+
+# --- Données personnelles (dossiers, personnages, stuffs, stock, fabrication, tags, corbeille) ---
+# Par défaut dans data/ ; peuvent être placées dans un dossier synchronisé via config.json ("dossierDonnees").
+data/folders.js
+data/folders/
+data/tags.js
+data/corbeille/
+# Anciennes données d'avant les dossiers.
+data/stuffs.js
+data/stock.js
+data/bank.js
+data/history.json
+# Liens avec les noms de l'ancien Google Sheet.
+data/item-aliases.json
+
+# --- Données du jeu (propriété de DofusDB) : téléchargées sur chaque installation (npm run setup) ---
+data/dofus/items.js
+data/dofus/items.json
+data/dofus/item-sets.json
+data/dofus/recipes.js
+data/item-icons.js
+assets/items/
+assets/jobs/
+# (data/dofus/scrolls.js, data/dofus/common-spells.js, assets/scrolls/ et assets/spells/ sont distribués.)
+
+# --- Référence personnelle (export de l'ancien Google Sheet) ---
+Team/
+
+# --- Divers ---
+node_modules/
+__pycache__/
+*.tmp
+.DS_Store
+Thumbs.db
